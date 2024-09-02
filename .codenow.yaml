@@ -1,0 +1,33 @@
+version: v1
+# If advanced mode is active CI pipelines use Dockerfile and helm descriptor from repository
+advancedMode:
+  enabled: false
+build:
+  # Image used by CI pipelines in build tasks, recommendation: use the official maven repo if you want to change runtime version: https://hub.docker.com/_/maven
+  image: docker.io/maven:3.9.1-eclipse-temurin-17
+  # Environment variables used by CI pipelines in all tasks
+  environmentVariables: []
+    #- key: variable1
+    #  value: value1
+    #- key: variable2
+    #  value: value2
+    #- key: variable3
+    #  value: value3
+  pipelines:
+    release:
+      pipeline: java-maven-app-release
+    preview:
+      pipeline: java-maven-app-preview
+    triggers: []
+runtime:
+  # Image is used as a base image for your runtime container
+  image: docker.io/eclipse-temurin:17-alpine
+  # Port on which the service will be exposed
+  port: 80
+  endpoints:
+    external:
+      # Expose service to external endpoint
+      enabled: true
+  java:
+    # JVM parameters that is used for extension of run command
+    jvmParameters: -Xmx128m -Xms128m -XX:MaxMetaspaceSize=128m
